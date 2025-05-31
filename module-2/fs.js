@@ -8,17 +8,46 @@
 const fs = require("fs")
 
 
-console.log('Task 1')
+// console.log('Task 1')
 
 
-const text = 'Learning File System'
+// const text = 'Learning File System'
 
-fs.writeFileSync('./hello.txt', text)
+// fs.writeFileSync('./hello.txt', text)
+
+// console.log('Task 3')
+
+// const data = fs.readFileSync('./hello.txt', {encoding: "utf-8"})
+
+// console.log('Task 4')
+
+// console.log(data);
+
+console.log('Task 1');
+let text = 'node js';
+
+
+
+fs.writeFile('./hello.txt', text, {encoding : 'utf8'}, (err) => {
+    if(err){
+        console.log('Something went wrong!', err)
+        return
+    }
+
+    console.log('Written successfully')
+
+})
+
+fs.readFile('./hello.txt', {encoding: 'utf-8'}, (err, data) => {
+    if(err){
+        console.log('Something went wrong!', err)
+        return
+    }
+    text = data;
+    console.log(data, 'inside readfile callback')
+});
+
+
+console.log(text)
 
 console.log('Task 3')
-
-const data = fs.readFileSync('./hello.txt', {encoding: "utf-8"})
-
-console.log('Task 4')
-
-console.log(data);
