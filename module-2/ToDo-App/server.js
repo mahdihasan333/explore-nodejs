@@ -84,6 +84,8 @@ const server = http.createServer((req, res) => {
     // const allTodos = fs.readFileSync(filePath, {encoding : "utf-8"})
 
     // res.end(JSON.stringify(allTodos));
+
+    // Single Todo
   } else if (pathname === "/todo" && req.method === "GET") {
     const title = url.searchParams.get("title");
     console.log(title, "title");
@@ -99,7 +101,7 @@ const server = http.createServer((req, res) => {
     });
     res.end(stringifiedTodo);
   }
-  // Update
+  // Update Todo
   else if (pathname === "/todos/update-todo" && req.method === "PATCH") {
     const title = url.searchParams.get("title");
     let data = "";
@@ -132,8 +134,24 @@ const server = http.createServer((req, res) => {
         )
       );
     });
-  } else if (pathname === "/todos/delete-todo" && req.method === "DELETE") {
+
+    // Delete Todo
+  }
+  // Delete Todo
+  else if (pathname === "/todos/delete-todo" && req.method === "DELETE") {
     const title = url.searchParams.get("title");
+    console.log(title, "title")
+
+    const allTodos = fs.readFileSync(filePath, {encoding : "utf-8"})
+    const parsedAllTodos = JSON.parse(allTodos)
+
+    const filteredTodos = parsedAllTodos.filter((todo) => todo.title !== title)
+
+    fs.writeFileSync(filePath, JSON.stringify(filteredTodos, null, 2),{encoding : "utf-8"})
+
+    res.end(JSON.stringify({message: "Todo Deleted Successfully"}))
+
+
   } else {
     res.end("Route Not Found");
   }
