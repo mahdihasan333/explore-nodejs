@@ -4,6 +4,8 @@ const fs = require("fs");
 
 const filePath = path.join(__dirname, "./db/todo.json");
 
+
+
 // const data = [
 //     {
 //         title: 'prisma',
@@ -19,9 +21,9 @@ const filePath = path.join(__dirname, "./db/todo.json");
 
 // const server = http.createServer((req, res) => {
 // console.log({req, res});
-// console.log(req.url, req.method)
+// console.log(pathname, req.method)
 // res.end('Welcome to ToDo App Server')
-// if(req.url === '/todos' && req.method === "GET"){
+// if(pathname === '/todos' && req.method === "GET"){
 //     res.writeHead(200, {
 // "content-type" : "application/json"
 // "content-type" : "text/html"
@@ -40,8 +42,11 @@ const filePath = path.join(__dirname, "./db/todo.json");
 // })
 
 const server = http.createServer((req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host}`)
+  const pathname = url.pathname
+  // console.log(url, "url")
   // GET All Todos
-  if (req.url === "/todos" && req.method === "GET") {
+  if (pathname === "/todos" && req.method === "GET") {
     const data = fs.readFileSync(filePath, { encoding: "utf-8" });
     res.writeHead(200, {
       "content-type": "application/json",
@@ -50,7 +55,7 @@ const server = http.createServer((req, res) => {
   }
 
   // POST A Todo
-  else if (req.url === "/todos/create-todo" && req.method === "POST") {
+  else if (pathname === "/todos/create-todo" && req.method === "POST") {
     let data = "";
 
     req.on("data", (chunk) => {
@@ -81,7 +86,26 @@ const server = http.createServer((req, res) => {
     // const allTodos = fs.readFileSync(filePath, {encoding : "utf-8"})
 
     // res.end(JSON.stringify(allTodos));
-  } else {
+  }
+  else if (pathname === '/todo' && req.method === "GET") {
+    const title = url.searchParams.get('title')
+    console.log(title, 'title')
+    const data = fs.readFileSync(filePath, { encoding: "utf-8" });
+    const parsedData = JSON.parse(data)
+
+    const todo = parsedData.find((todo) => todo.title === title)
+
+    const stringifiedTodo = JSON.stringify(todo)
+
+    res.writeHead(200, {
+      "content-type": "application/json",
+    });
+    res.end(stringifiedTodo);
+
+    res.end('Single todo')
+  }
+
+  else {
     res.end("Route Not Found");
   }
 });
