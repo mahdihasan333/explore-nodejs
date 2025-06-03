@@ -12,9 +12,19 @@ const filePath = path_1.default.join(__dirname, "../db/todo.json");
 app.get('/', (req, res) => {
     res.send('Welcome to Todos App!');
 });
+// GET DATA
 app.get('/todos', (req, res) => {
+    // console.log(req.query)
     const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
-    console.log(data);
+    // console.log(data)
+    res.json(data);
+});
+// GET Single DATA
+app.get('/todo/:title/:body', (req, res) => {
+    console.log('From Query', req.query);
+    console.log('From params', req.params);
+    const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
+    // console.log(data)
     res.json(data);
 });
 app.post('/todos/create-todo', (req, res) => {
