@@ -1,38 +1,32 @@
 import express, { Application, Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
+import { todosRouter } from './app/todos/todos.routes';
 const app : Application = express()
 
 app.use(express.json())
 
-const todosRouter = express.Router();
+// const todosRouter = express.Router();
+const userRouter = express.Router()
 
-app.use('/', todosRouter)
 
-todosRouter.get('/todos', (req : Request, res : Response) => {
-  // console.log(req.query)
-  const data = fs.readFileSync(filePath, { encoding: "utf-8" });
-  // console.log(data)
-  console.log('From Todos Router')
-  res.json({
-    message: 'From todos Router',
-    data
-  })
-})
+
+app.use('/todos', todosRouter);
+app.use('/users', userRouter)
+
 
 const filePath = path.join(__dirname, "../db/todo.json");
-
 
 app.get('/', (req : Request, res : Response) => {
   res.send('Welcome to Todos App!')
 })
 // GET DATA
-app.get('/todos', (req : Request, res : Response) => {
-  // console.log(req.query)
-  const data = fs.readFileSync(filePath, { encoding: "utf-8" });
-  // console.log(data)
-  res.json(data)
-})
+// app.get('/todos', (req : Request, res : Response) => {
+//   // console.log(req.query)
+//   const data = fs.readFileSync(filePath, { encoding: "utf-8" });
+//   // console.log(data)
+//   res.json(data)
+// })
 
 // GET Single DATA
 app.get('/todo/:title/:body', (req : Request, res : Response) => {
@@ -43,15 +37,11 @@ app.get('/todo/:title/:body', (req : Request, res : Response) => {
   res.json(data)
 })
 
-app.post('/todos/create-todo', (req: Request, res: Response) => {
-  const {title, body} = req.body;
-  console.log(title, body)
-  res.send('Hello World')
-})
+
 
 
 // [app] [express.json()]-[todosRouter]=[Root Route "/"]-[GET "/todos"]-[POST Create ToDo]
-
+// [todosRouter]-[get all todos /todos GET]-[create todo /todos/create-todo POST todo]
 
 
 

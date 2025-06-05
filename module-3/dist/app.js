@@ -6,31 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const todos_routes_1 = require("./app/todos/todos.routes");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-const todosRouter = express_1.default.Router();
-app.use('/', todosRouter);
-todosRouter.get('/todos', (req, res) => {
-    // console.log(req.query)
-    const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
-    // console.log(data)
-    console.log('From Todos Router');
-    res.json({
-        message: 'From todos Router',
-        data
-    });
-});
+// const todosRouter = express.Router();
+const userRouter = express_1.default.Router();
+app.use('/todos', todos_routes_1.todosRouter);
+app.use('/users', userRouter);
 const filePath = path_1.default.join(__dirname, "../db/todo.json");
 app.get('/', (req, res) => {
     res.send('Welcome to Todos App!');
 });
 // GET DATA
-app.get('/todos', (req, res) => {
-    // console.log(req.query)
-    const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
-    // console.log(data)
-    res.json(data);
-});
+// app.get('/todos', (req : Request, res : Response) => {
+//   // console.log(req.query)
+//   const data = fs.readFileSync(filePath, { encoding: "utf-8" });
+//   // console.log(data)
+//   res.json(data)
+// })
 // GET Single DATA
 app.get('/todo/:title/:body', (req, res) => {
     console.log('From Query', req.query);
@@ -39,12 +32,8 @@ app.get('/todo/:title/:body', (req, res) => {
     // console.log(data)
     res.json(data);
 });
-app.post('/todos/create-todo', (req, res) => {
-    const { title, body } = req.body;
-    console.log(title, body);
-    res.send('Hello World');
-});
 // [app] [express.json()]-[todosRouter]=[Root Route "/"]-[GET "/todos"]-[POST Create ToDo]
+// [todosRouter]-[get all todos /todos GET]-[create todo /todos/create-todo POST todo]
 exports.default = app;
 /**
  * Basic File structure
