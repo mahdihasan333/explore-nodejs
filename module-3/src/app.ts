@@ -5,6 +5,21 @@ const app : Application = express()
 
 app.use(express.json())
 
+const todosRouter = express.Router();
+
+app.use('/', todosRouter)
+
+todosRouter.get('/todos', (req : Request, res : Response) => {
+  // console.log(req.query)
+  const data = fs.readFileSync(filePath, { encoding: "utf-8" });
+  // console.log(data)
+  console.log('From Todos Router')
+  res.json({
+    message: 'From todos Router',
+    data
+  })
+})
+
 const filePath = path.join(__dirname, "../db/todo.json");
 
 
@@ -33,6 +48,9 @@ app.post('/todos/create-todo', (req: Request, res: Response) => {
   console.log(title, body)
   res.send('Hello World')
 })
+
+
+// [app] [express.json()]-[todosRouter]=[Root Route "/"]-[GET "/todos"]-[POST Create ToDo]
 
 
 

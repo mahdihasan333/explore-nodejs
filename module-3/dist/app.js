@@ -8,6 +8,18 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+const todosRouter = express_1.default.Router();
+app.use('/', todosRouter);
+todosRouter.get('/todos', (req, res) => {
+    // console.log(req.query)
+    const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
+    // console.log(data)
+    console.log('From Todos Router');
+    res.json({
+        message: 'From todos Router',
+        data
+    });
+});
 const filePath = path_1.default.join(__dirname, "../db/todo.json");
 app.get('/', (req, res) => {
     res.send('Welcome to Todos App!');
@@ -32,6 +44,7 @@ app.post('/todos/create-todo', (req, res) => {
     console.log(title, body);
     res.send('Hello World');
 });
+// [app] [express.json()]-[todosRouter]=[Root Route "/"]-[GET "/todos"]-[POST Create ToDo]
 exports.default = app;
 /**
  * Basic File structure
