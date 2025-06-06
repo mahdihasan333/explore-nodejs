@@ -11,23 +11,24 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // const todosRouter = express.Router();
 const userRouter = express_1.default.Router();
-app.use('/todos', todos_routes_1.todosRouter);
-app.use('/users', userRouter);
+app.use("/todos", todos_routes_1.todosRouter);
+app.use("/users", userRouter);
 const filePath = path_1.default.join(__dirname, "../db/todo.json");
-app.get('/', (req, res) => {
-    res.send('Welcome to Todos App!');
+app.get("/", (req, res, next) => {
+    console.log("I am custom middleware");
+    console.log({
+        url: req.url,
+        method: req.method,
+        header: req.header
+    });
+    next();
+}, (req, res) => {
+    res.send("Welcome to Todos App!");
 });
-// GET DATA
-// app.get('/todos', (req : Request, res : Response) => {
-//   // console.log(req.query)
-//   const data = fs.readFileSync(filePath, { encoding: "utf-8" });
-//   // console.log(data)
-//   res.json(data)
-// })
 // GET Single DATA
-app.get('/todo/:title/:body', (req, res) => {
-    console.log('From Query', req.query);
-    console.log('From params', req.params);
+app.get("/todo/:title/:body", (req, res) => {
+    console.log("From Query", req.query);
+    console.log("From params", req.params);
     const data = fs_1.default.readFileSync(filePath, { encoding: "utf-8" });
     // console.log(data)
     res.json(data);
@@ -40,4 +41,4 @@ exports.default = app;
  * server - server handling like - starting, closing error handling of server. only related to server
  * app file - routing handle, middleware, route related error
  * app folder - app business logic handling like create read update delete, database related works
- */ 
+ */

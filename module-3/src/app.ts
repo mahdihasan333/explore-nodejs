@@ -1,49 +1,47 @@
-import express, { Application, Request, Response } from 'express';
-import fs from 'fs';
-import path from 'path';
-import { todosRouter } from './app/todos/todos.routes';
-const app : Application = express()
+import express, { Application, NextFunction, Request, Response } from "express";
+import fs from "fs";
+import path from "path";
+import { todosRouter } from "./app/todos/todos.routes";
+const app: Application = express();
 
-app.use(express.json())
+app.use(express.json());
 
 // const todosRouter = express.Router();
-const userRouter = express.Router()
+const userRouter = express.Router();
 
-
-
-app.use('/todos', todosRouter);
-app.use('/users', userRouter)
-
+app.use("/todos", todosRouter);
+app.use("/users", userRouter);
 
 const filePath = path.join(__dirname, "../db/todo.json");
 
-app.get('/', (req : Request, res : Response) => {
-  res.send('Welcome to Todos App!')
-})
-// GET DATA
-// app.get('/todos', (req : Request, res : Response) => {
-//   // console.log(req.query)
-//   const data = fs.readFileSync(filePath, { encoding: "utf-8" });
-//   // console.log(data)
-//   res.json(data)
-// })
+app.get(
+  "/",
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log("I am custom middleware");
+    console.log({
+      url: req.url,
+      method: req.method,
+      header: req.header
+    })
+    next();
+  },
+
+  (req: Request, res: Response) => {
+    res.send("Welcome to Todos App!");
+  }
+);
 
 // GET Single DATA
-app.get('/todo/:title/:body', (req : Request, res : Response) => {
-  console.log('From Query', req.query)
-  console.log('From params', req.params)
+app.get("/todo/:title/:body", (req: Request, res: Response) => {
+  console.log("From Query", req.query);
+  console.log("From params", req.params);
   const data = fs.readFileSync(filePath, { encoding: "utf-8" });
   // console.log(data)
-  res.json(data)
-})
-
-
-
+  res.json(data);
+});
 
 // [app] [express.json()]-[todosRouter]=[Root Route "/"]-[GET "/todos"]-[POST Create ToDo]
 // [todosRouter]-[get all todos /todos GET]-[create todo /todos/create-todo POST todo]
-
-
 
 export default app;
 
