@@ -12,6 +12,18 @@ export const handleProducts = async(req : IncomingMessage, res : ServerResponse)
         res.writeHead(200, {'content-type' : 'application/json'})
         res.end(JSON.stringify(products))
     }
+    else if(idMatch && req.method === 'GET'){
+        const product = products.find(p => p.id === id)
+
+        if(product){
+            res.writeHead(200, {'content-type' : 'application/json'})
+            res.end(JSON.stringify(product))
+        }
+        else{
+            res.writeHead(404)
+            res.end('Product Not Found')
+        }
+    }
     else if(url === '/products' && req.method === 'POST'){
         try {
             const body =  await parseBody(req)
