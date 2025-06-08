@@ -37,6 +37,18 @@ export const handleProducts = async(req : IncomingMessage, res : ServerResponse)
             res.end('Product Not Found')
         }
     }
+    else if(idMatch && req.method === 'DELETE'){
+        const index = products.findIndex(p => p.id === id)
+        if(index !== -1){
+            products.splice(index, 1)
+            res.writeHead(200, {'content-type' : 'application/json'})
+            res.end(JSON.stringify({message : 'Deleted Successfully'}))
+        }
+        else{
+            res.writeHead(404)
+            res.end('Product Not Found')
+        }
+    }
 
 
 }
