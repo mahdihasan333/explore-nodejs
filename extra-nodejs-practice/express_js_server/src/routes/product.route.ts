@@ -5,7 +5,7 @@ import { createProduct, deleteProduct, getAllProducts, getProductById, updatePro
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send('Welcome to the Express Server');
+  res.send('Welcome to the Express Server!');
 });
 
 router.get('/products', getAllProducts);
