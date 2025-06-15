@@ -63,6 +63,18 @@ app.get('/notes', async (req: Request, res: Response) => {
     })
 })
 
+app.get('/notes/:noteId', async (req: Request, res: Response) => {
+    const noteId = req.params.noteId
+    // const note = await Note.findOne({_id: noteId})
+    const note = await Note.findById(noteId)
+
+    res.status(201).json({
+        success: true,
+        message: 'Note Created Successfully',
+        note
+    })
+})
+
 app.get('/', (req: Request, res: Response) => {
     res.send('Welcome to Note App')
 })
