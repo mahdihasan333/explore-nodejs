@@ -23,13 +23,15 @@ const noteSchema = new Schema({
         label: {type: String, required: true},
         color: {type: String, default: 'gray'}
     }
+}, {
+    versionKey: false,
+    timestamps: true
 })
 
 const Note = model('Note', noteSchema)
 
 app.post('/notes/create-note', async (req: Request, res: Response) => {
     const body = req.body;
-
 
     // Approach - 1 of creating a data
     // const myNote = new Note({
@@ -41,11 +43,8 @@ app.post('/notes/create-note', async (req: Request, res: Response) => {
 
     // await myNote.save()
 
-
-
     // Approach - 2
     const note = await Note.create(body)
-
     res.status(201).json({
         success: true,
         message: 'Note Created Successfully',
