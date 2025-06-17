@@ -6,16 +6,31 @@ const userSchema = new Schema<IUser>({
     firstName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: [3, 'First Name must be 3 characters, got {VALUE}'],
+        maxlength: 10
     },
     lastName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: [3, 'Last Name must be 3 characters, got {VALUE}'],
+        maxlength: 10
+        
+    },
+    age: {
+        type: Number,
+        required: true,
+        trim: true,
+        min: 21,
+        // min: [21, 'Age Must be at least 18, got {VALUE}'],
+        max: 60
     },
     email: {
         type : String,
+        unique: true,
         required: true,
+        lowercase: true,
         trim: true
     },
     password: {
@@ -24,8 +39,9 @@ const userSchema = new Schema<IUser>({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+        uppercase: true,
+        enum: ['USER', 'ADMIN', 'SUPERADMIN '],
+        default: 'USER'
     }
 })
 
