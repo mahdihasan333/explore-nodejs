@@ -22,8 +22,8 @@ const userSchema = new Schema<IUser>({
         type: Number,
         required: true,
         trim: true,
-        min: 21,
-        // min: [21, 'Age Must be at least 18, got {VALUE}'],
+        // min: 21,
+        min: [21, 'Age Must be at least 18, got {VALUE}'],
         max: 60
     },
     email: {
