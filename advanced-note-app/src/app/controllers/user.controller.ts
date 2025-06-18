@@ -1,64 +1,80 @@
-import express, { Request, Response } from 'express';
-import { User } from '../models/user.model';
+import express, { Request, Response } from "express";
+import { User } from "../models/user.model";
+import { string, z } from "zod";
 
-export const userRoutes = express.Router()
+export const userRoutes = express.Router();
 
-userRoutes.post('/create-user', async (req: Request, res: Response)=> {
-    const body = req.body;
+const CrateUserZodSchema = z.object({
+  firstName: z.string(),
+  lastName: string(),
+  age: z.number(),
+  email: z.string(),
+  password: z.string(),
+  role: z.string().optional(),
+});
 
-    const user = await User.create(body)
+userRoutes.post("/create-user", async (req: Request, res: Response) => {
+  try {
+    const body = await CrateUserZodSchema.parseAsync(req.body)
+
+
+
+    const user = await User.create(body);
     res.status(201).json({
-        success: true,
-        message: 'User Created Successfully',
-        user
+      success: true,
+      message: "User Created Successfully",
+      user
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      error
     })
-})
+  }
+});
 
+userRoutes.get("/", async (req: Request, res: Response) => {
+  const users = await User.find();
 
-userRoutes.get('/', async (req: Request, res: Response)=> {
-    const users = await User.find()
+  res.status(201).json({
+    success: true,
+    message: "All User Retrieved Successfully",
+    users,
+  });
+});
 
-    res.status(201).json({
-        success: true,
-        message: 'All User Retrieved Successfully',
-        users
-    })
-})
+userRoutes.get("/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const user = await User.findById(userId);
 
+  res.status(201).json({
+    success: true,
+    message: "Single User Retrieved Successfully",
+    user,
+  });
+});
 
-userRoutes.get('/:userId', async(req: Request, res: Response)=> {
-    const userId = req.params.userId
-    const user = await User.findById(userId)
+userRoutes.patch("/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const updatedUser = req.body;
+  const user = await User.findByIdAndUpdate(userId, updatedUser, { new: true });
 
-    res.status(201).json({
-        success: true,
-        message: 'Single User Retrieved Successfully',
-        user
-    })
-})
+  res.status(201).json({
+    success: true,
+    message: "User Updated Successfully",
+    user,
+  });
+});
 
+userRoutes.delete("/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const user = await User.findByIdAndDelete(userId);
 
-userRoutes.patch('/:userId', async(req: Request, res: Response)=> {
-    const userId = req.params.userId
-    const updatedUser = req.body
-    const user = await User.findByIdAndUpdate(userId, updatedUser, {new: true})
-
-    res.status(201).json({
-        success: true,
-        message: 'User Updated Successfully',
-        user
-    })
-})
-
-
-userRoutes.delete('/:userId', async(req: Request, res: Response)=> {
-    const userId = req.params.userId
-    const user = await User.findByIdAndDelete(userId)
-
-
-    res.status(201).json({
-        success: true,
-        message: 'User Deleted Successfully',
-        user
-    })
-})
+  res.status(201).json({
+    success: true,
+    message: "User Deleted Successfully",
+    user,
+  });
+});
