@@ -15,9 +15,8 @@ const CrateUserZodSchema = z.object({
 
 userRoutes.post("/create-user", async (req: Request, res: Response) => {
   try {
-    const body = await CrateUserZodSchema.parseAsync(req.body)
-
-
+    // const zodBody = await CrateUserZodSchema.parseAsync(req.body)
+    const body = req.body
 
     const user = await User.create(body);
     res.status(201).json({
