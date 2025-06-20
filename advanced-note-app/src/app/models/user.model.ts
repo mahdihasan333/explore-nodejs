@@ -14,7 +14,7 @@ const addressSchema = new Schema<IAddress>({
 const userSchema = new Schema<IUser>({
   firstName: {
     type: String,
-    required: [true, "FirstName keno daw nai"],
+    required: [true, "FirstName keno daw nai na dele"],
     trim: true,
     minlength: [3, "First Name must be 3 characters, got {VALUE}"],
     maxlength: 10,
