@@ -21,7 +21,7 @@ notesRoutes.post('/create-note', async (req: Request, res: Response) => {
     const note = await Note.create(body)
     res.status(201).json({
         success: true,
-        message: 'Note Created Successfully',
+        message: 'Note Created Successfully!!',
         note
     })
 })
