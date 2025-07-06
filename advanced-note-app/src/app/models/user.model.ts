@@ -1,5 +1,5 @@
-import { model, Schema } from "mongoose";
-import { IAddress, IUser } from "../interfaces/user.interface";
+import { Model, model, Schema } from "mongoose";
+import { IAddress, IUser, UserInstanceMethods } from "../interfaces/user.interface";
 import validator from 'validator'
 
 const addressSchema = new Schema<IAddress>({
@@ -11,7 +11,7 @@ const addressSchema = new Schema<IAddress>({
 })
 
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser, Model<IUser>, UserInstanceMethods>({
   firstName: {
     type: String,
     required: [true, "FirstName keno daw nai na dele"],
@@ -70,5 +70,7 @@ const userSchema = new Schema<IUser>({
     versionKey: false,
     timestamps: true
 });
+
+userSchema.method('hashPassword')
 
 export const User = model("User", userSchema);
