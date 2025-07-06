@@ -74,6 +74,7 @@ const userSchema = new Schema<IUser, Model<IUser>, UserInstanceMethods>({
 
 userSchema.method('hashPassword', async function(plainPassword: string){
   const password = await bcrypt.hash(plainPassword, 10);
+  console.log(password)
   return password
 })
 
