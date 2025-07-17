@@ -72,7 +72,7 @@ userRoutes.patch("/:userId", async (req: Request, res: Response) => {
 
   res.status(201).json({
     success: true,
-    message: "User Updated is Successfully",
+    message: "User Updated Successfully!",
     user,
   });
 });
